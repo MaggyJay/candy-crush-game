@@ -1,0 +1,14 @@
+.grid {
+    /*we're making 8 x 8 squares, 70 pixels which is how we get 560px*/
+    height: 560px;
+    width: 560px;
+    display: flex;
+    flex-wrap: wrap;
+    /* wheter flex items are forced onto on eline or can wrap onto multiple lines */
+    background-color: purple;
+}
+
+.grid div {
+    height: 70px;
+    width: 70px;
+}
