@@ -37,12 +37,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     //Drag the candies
-let colorBeingDragged 
+    let colorBeingDragged;
+    let colorBeingReplaced;
+    let squareIdBeingDragged;
+    let squareIdBeingReplaced;
 
 
 
     squares.forEach(square => square.addEventListener('dragstart', dragStart));
-    // for each square in our square array we have an event listerning
+    // for each square in our square array we have an event listening
     //research more into addevent listners 
     squares.forEach(square => square.addEventListener('dragend', dragEnd));
     squares.forEach(square => square.addEventListener('dragover', dragOver));
@@ -51,17 +54,25 @@ let colorBeingDragged
     squares.forEach(square => square.addEventListener('dragdrop', dragDrop));
 
     function dragStart() {
-        colorBeingDragged = this.style.backgroundColor
+        colorBeingDragged = this.style.backgroundColor;
+        squareIdBeingDragged = parseInt(this.id);
         console.log(colorBeingDragged);
         console.log(this.id, 'dragstart');
-        //passing the id of the squares being listened to, this is picking up the element which we set using the set attribute
+            //passing the id of the squares being listened to, this is picking up the element 
+            //which we set using the set attribute on line 23.
     }
 
-    function dragOver() {
+    function dragOver(e) {
+        //using e for 'event'
+        e.preventDefault ();
+            //we prevent it from doing anything as it's dragging.
+            //I can go back and add animations/styling/etc if I choose to
+            //for the dragging process
         console.log(this.id, 'dragover');
     }
 
-    function dragEnter() {
+    function dragEnter(e) {
+        e.preventDefault();
         console.log(this.id, 'dragenter');
     }
 
@@ -69,11 +80,40 @@ let colorBeingDragged
         console.log(this.id, 'dragleave');
     }
 
-    function dragEnd() {
-        console.log(this.id, 'dragend');
-    }
-
     function dragDrop() {
         console.log(this.id, 'dragdrop');
+        colorBeingReplaced = this.style.backgroundColor;
+        squareIdBeingReplaced = parseInt(this.id);
+        this.style.backgroundColor = colorBeingDragged;
+        squares[squareIdBeingDragged].style.backgroundColor = colorBeingReplaced;
+            //adding the square id of the square being dragged into the squares array, we want to add the squares color
     }
+
+    
+    function dragEnd() {
+        console.log(this.id, 'dragend');
+            //what is a valid move?
+        let validMoves = [
+            squareIdBeingDragged - 1,
+            squareIdBeingDragged - width,
+            squareIdBeingDragged + 1,
+            squareIdBeingDragged + width
+         ]
+
+         let validMove = validMoves.includes(squareIdBeingReplaced)
+
+         if (squareIdBeingReplaced && validMove) {
+             
+            squareIdBeingReplaced = null;
+         }
+         else if (squareIdBeingReplaced && !validMove) {
+            
+            squares[squareIdBeingReplaced].style.backgroundColor = colorBeingReplaced;
+             squares[squareIdBeingDragged].style.backgroundColor = colorBeingDragged;
+         }
+         else {
+             squares [squareIdBeingDragged].style.backgroundColor = colorBeingDragged;
+         }
+    }
+
 })
