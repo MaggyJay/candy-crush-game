@@ -5,7 +5,6 @@
     display: flex;
     flex-wrap: wrap;
     /* wheter flex items are forced onto on eline or can wrap onto multiple lines */
-    background-color: purple;
 }
 
 .grid div {
