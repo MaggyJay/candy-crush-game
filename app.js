@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
     const width = 8;
     const squares = [];
+    let score = 0;
 
 
     const candyColors = [
@@ -55,16 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
         squareIdBeingDragged = parseInt(this.id);
         console.log('this is the colorbeing dragged--  ' + colorBeingDragged);
         console.log(this.id, 'dragstart');
-            //passing the id of the squares being listened to, this is picking up the element 
-            //which we set using the set attribute on line 23.
+            //passing the id of the squares being listened to, this is picking up the element which we set using the set attribute on line 23.
     }
 
     function dragOver(e) {
         //using e for 'event'
         e.preventDefault ();
             //we prevent it from doing anything as it's dragging.
-            //I can go back and add animations/styling/etc if I choose to
-            //for the dragging process
+            //I can go back and add animations/styling/etc if I choose to for the dragging process
         console.log(this.id, 'dragover');
     }
 
@@ -91,14 +90,20 @@ document.addEventListener('DOMContentLoaded', () => {
     function dragEnd() {
         console.log(this.id, 'dragend');
             //what is a valid move?
+            //in candy crush you can only switch candies with those that are directly above, below, to the right or to the left of the current candy
         let validMoves = [
             squareIdBeingDragged - 1,
+            //if you're on square 67 you're saying it can be switched out with square 66
             squareIdBeingDragged - width,
+            //square visually above our square
             squareIdBeingDragged + 1,
+            //square 68 if we're on square 67
             squareIdBeingDragged + width
+            //square 75 if we're on square 67 (below our square in grid)
          ]
 
          let validMove = validMoves.includes(squareIdBeingReplaced)
+         //if the number pass thru the square id being replaced is included in our valid moves array, we store the value of true. 
 
          if (squareIdBeingReplaced && validMove) {
              
@@ -107,11 +112,37 @@ document.addEventListener('DOMContentLoaded', () => {
          else if (squareIdBeingReplaced && !validMove) {
             
             squares[squareIdBeingReplaced].style.backgroundColor = colorBeingReplaced;
+            //since the square can't move as its not a valid move, we are giving the square back its color.
              squares[squareIdBeingDragged].style.backgroundColor = colorBeingDragged;
+             //give the original square its original color again
          }
          else {
              squares [squareIdBeingDragged].style.backgroundColor = colorBeingDragged;
          }
     }
+
+
+
+
+    //Checking for matches
+    //check for row of three
+
+    function checkRowForThree () {
+        //we have to loop 61 instead of 63 because there are no squares after index 63
+        for (i =0; i < 61; i++) {
+            let rowOfThree = [i, i+1, i+2];
+            let decidedColor = squares[i].style.backgroundColor;
+            const isBlank = squares[i].style.backgroundColor === '';
+
+            if (rowOfThree.every(index => squares[index].style.backgroundColor === decidedColor && !isBlank)) {
+                rowOfThree.forEach(index => {
+                    squares[index].style.backgroundColor = '';
+                })
+            }
+        }
+    }
+    checkRowForThree();
+
+
 
 })
