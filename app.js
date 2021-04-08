@@ -22,8 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
             //we want to give each grid an id so that we know which one we are moving
             square.setAttribute('id', i) //now everytime our loop occurs our i's have values from 0 to 63.
 
-
-
             let randomColor = Math.floor(Math.random() * candyColors.length);
                 //we now have a random number from 0 to 5.
             square.style.backgroundColor = candyColors[randomColor];
@@ -32,9 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
             squares.push(square);
         }
     }
+    
     createBoard();
-
-
 
     //Drag the candies
     let colorBeingDragged;
@@ -51,12 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
     squares.forEach(square => square.addEventListener('dragover', dragOver));
     squares.forEach(square => square.addEventListener('dragenter', dragEnter));
     squares.forEach(square => square.addEventListener('dragleave', dragLeave));
-    squares.forEach(square => square.addEventListener('dragdrop', dragDrop));
+    squares.forEach(square => square.addEventListener('drop', dragDrop));
 
     function dragStart() {
         colorBeingDragged = this.style.backgroundColor;
         squareIdBeingDragged = parseInt(this.id);
-        console.log(colorBeingDragged);
+        console.log('this is the colorbeing dragged--  ' + colorBeingDragged);
         console.log(this.id, 'dragstart');
             //passing the id of the squares being listened to, this is picking up the element 
             //which we set using the set attribute on line 23.
@@ -86,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
         squareIdBeingReplaced = parseInt(this.id);
         this.style.backgroundColor = colorBeingDragged;
         squares[squareIdBeingDragged].style.backgroundColor = colorBeingReplaced;
+        console.log(squares[squareIdBeingDragged].style.backgroundColor = colorBeingReplaced);
             //adding the square id of the square being dragged into the squares array, we want to add the squares color
     }
 
