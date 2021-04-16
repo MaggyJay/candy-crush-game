@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.querySelector('.grid');
+    const scoreDisplay = document.getElementById('score');
     const width = 8;
     const squares = [];
     let score = 0;
@@ -122,9 +123,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
+// drop candies once some have been cleared
+
+function moveDown() {
+    for (i = 0; i < 55; i++) {
+        if (squares[i + width].style.backgroundColor === ''){
+            squares[i + width].style.backgroundColor = squares[i].style.backgroundColor;
+            squares[i].style.backgroundColor = '';
+            const firstRow = [0, 1, 2, 3, 4, 5, 6, 7];
+            const isFirstRow = firstRow.includes(i);
+            if (isFirstRow && squares[i].style.backgroundColor === '') {
+                let randomColor = Math.floor(Math.random() * candyColors.length);
+                squares[i].style.backgroundColor = candyColors[randomColor];
+            }
+        }
+    }
+}
 
 
-    //Checking for matches
+
+
+
+//Checking for matches
+
+//Check for matches of 5--will add later to code
 
 //check for row of four
 
@@ -140,6 +162,7 @@ function checkRowForFour () {
 
         if (rowOfFour.every(index => squares[index].style.backgroundColor === decidedColor && !isBlank)) {
             score += 4;
+            scoreDisplay.innerHTML = score;
             rowOfFour.forEach(index => {
                 squares[index].style.backgroundColor = '';
             })
@@ -159,6 +182,7 @@ function checkColumnForFour () {
 
         if (columnOfFour.every(index => squares[index].style.backgroundColor === decidedColor && !isBlank)){
             score += 4;
+            scoreDisplay.innerHTML = score;
             columnOfFour.forEach(index => {
                 squares[index].style.backgroundColor = '';
             })
@@ -183,6 +207,7 @@ checkColumnForFour();
 
             if (rowOfThree.every(index => squares[index].style.backgroundColor === decidedColor && !isBlank)) {
                 score += 3;
+                scoreDisplay.innerHTML = score;
                 rowOfThree.forEach(index => {
                     squares[index].style.backgroundColor = '';
                 })
@@ -202,6 +227,7 @@ checkColumnForFour();
 
             if (columnOfThree.every(index => squares[index].style.backgroundColor === decidedColor && !isBlank)) {
                 score += 3;
+                scoreDisplay.innerHTML = score;
                 columnOfThree.forEach(index => {
                     squares[index].style.backgroundColor = '';
                 })
@@ -215,6 +241,7 @@ checkColumnForFour();
     //want to invoke the checkrowthree function every 100 millisecond, maybe check out tetris to learn more about this
 
     window.setInterval(function(){
+        moveDown();
         checkRowForFour();
         checkColumnForFour();
         checkRowForThree();
